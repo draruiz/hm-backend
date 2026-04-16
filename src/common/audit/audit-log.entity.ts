@@ -12,6 +12,11 @@ export enum AuditAction {
   USER_REGISTERED = 'USER_REGISTERED',
   USER_LOGIN = 'USER_LOGIN',
   USER_LOCKED = 'USER_LOCKED',
+  BLOG_ACCESS_LIST = 'BLOG_ACCESS_LIST',
+  BLOG_ACCESS_DETAIL = 'BLOG_ACCESS_DETAIL',
+  BLOG_CREATED = 'BLOG_CREATED',
+  BLOG_UPDATED = 'BLOG_UPDATED',
+  BLOG_DELETED = 'BLOG_DELETED',
 }
 
 @Entity('audit_logs')
@@ -25,7 +30,7 @@ export class AuditLog {
   @Column()
   resource: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   resourceId: string | null;
 
   @Column()
@@ -40,7 +45,7 @@ export class AuditLog {
   @Column()
   ip: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   userAgent: string | null;
 
   @CreateDateColumn()

@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
+import { BlogModule } from './blog/blog.module.js';
 import { AuditModule } from './common/audit/audit.module.js';
 import { EncryptionModule } from './common/encryption/encryption.module.js';
 import { FormsModule } from './forms/forms.module.js';
@@ -26,7 +27,9 @@ import { UsersModule } from './users/users.module.js';
         password: config.get<string>('DB_PASSWORD', 'postgres'),
         database: config.get<string>('DB_NAME', 'healthy_mind'),
         autoLoadEntities: true,
-        synchronize: config.get<string>('NODE_ENV') !== 'production',
+        synchronize: false,
+        migrationsRun: true,
+        migrations: [__dirname + '/core/database/migrations/*{.ts,.js}'],
         ssl:
           config.get<string>('NODE_ENV') === 'production'
             ? { rejectUnauthorized: true }
@@ -39,6 +42,7 @@ import { UsersModule } from './users/users.module.js';
     EncryptionModule,
     AuditModule,
     AuthModule,
+    BlogModule,
     FormsModule,
     UsersModule,
   ],
