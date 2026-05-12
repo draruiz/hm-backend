@@ -10,12 +10,16 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import { BlogModule } from './blog/blog.module.js';
 import { AuditModule } from './common/audit/audit.module.js';
 import { EncryptionModule } from './common/encryption/encryption.module.js';
+import { validateEnv } from './core/config/env.validation';
 import { FormsModule } from './forms/forms.module.js';
 import { UsersModule } from './users/users.module.js';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnv,
+    }),
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
