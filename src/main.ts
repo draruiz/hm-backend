@@ -25,8 +25,8 @@ async function bootstrap() {
         'http://127.0.0.1:4321',
 
         // HTTPS RAILWAY
-        'https://admin-healthymind-new-version.vercel.app/',
-        'https://healthymind-newversion.vercel.app/',
+        'https://admin-healthymind-new-version.vercel.app',
+        'https://healthymind-newversion.vercel.app',
       ];
 
       // Permitir todos los subdominios de almaymente.io (con o sin www)
