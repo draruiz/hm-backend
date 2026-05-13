@@ -34,18 +34,6 @@ import { UsersModule } from './users/users.module.js';
         synchronize: false,
         migrationsRun: true,
         migrations: [__dirname + '/core/database/migrations/*{.ts,.js}'],
-        ssl:
-          config.get<string>('NODE_ENV') === 'production'
-            ? {
-                rejectUnauthorized: config.get<boolean>(
-                  'DB_SSL_REJECT_UNAUTHORIZED',
-                  true,
-                ),
-                ...(config.get<string>('DB_SSL_CA') && {
-                  ca: config.get<string>('DB_SSL_CA'),
-                }),
-              }
-            : false,
       }),
     }),
 
