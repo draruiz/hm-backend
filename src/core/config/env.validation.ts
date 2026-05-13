@@ -12,6 +12,15 @@ const envSchema = z.object({
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
+  // Set to 'false' only when your managed DB provider uses a self-signed cert.
+  // Prefer supplying DB_SSL_CA (PEM content) for full cert verification instead.
+  DB_SSL_REJECT_UNAUTHORIZED: z
+    .enum(['true', 'false'])
+    .optional()
+    .default('true')
+    .transform((v) => v === 'true'),
+  // Optional: PEM-encoded CA certificate for full SSL verification
+  DB_SSL_CA: z.string().optional(),
 
   // CORS
   CORS_ORIGIN: z.string(),

@@ -15,6 +15,10 @@ export default new DataSource({
   migrations: ['src/core/database/migrations/*.ts'],
   ssl:
     process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: true }
+      ? {
+          rejectUnauthorized:
+            process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
+          ...(process.env.DB_SSL_CA && { ca: process.env.DB_SSL_CA }),
+        }
       : false,
 });
