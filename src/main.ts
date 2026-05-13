@@ -7,22 +7,51 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Enable CORS for all origins
+  // Enable CORS for localhost (HTTP and HTTPS)
   app.enableCors({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-    origin: (_origin, callback) => callback(null, true),
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'Accept',
-      'Origin',
-      'X-Requested-With',
-    ],
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        // HTTP localhost
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:4200',
+        'http://localhost:5173',
+        'http://localhost:8080',
+        'http://localhost:4321',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://127.0.0.1:4200',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:8080',
+        'http://127.0.0.1:4321',
+
+        // HTTPS PROD
+        'https://dra-ruiz-ai.vercel.app',
+        'https://admin-healthymind-new-version.vercel.app',
+        'https://healthymind-newversion.vercel.app',
+
+        // HTTPS RAILWAY
+        'https://ai-frontend-production-9841.up.railway.app',
+      ];
+
+      // Permitir todos los subdominios de almaymente.io (con o sin www)
+      const almaymenteRegex = /^https:\/\/([\w-]+\.)?almaymente\.io$/;
+
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        almaymenteRegex.test(origin)
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        callback(null, true);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
   });
 
-  await app.listen(configService.get<number>('PORT', 3000));
+  await app.listen(configService.get<number>('PORT', 4000));
 }
 bootstrap();
