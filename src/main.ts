@@ -36,11 +36,14 @@ async function bootstrap() {
 
       // Permitir todos los subdominios de almaymente.io (con o sin www)
       const almaymenteRegex = /^https:\/\/([\w-]+\.)?almaymente\.io$/;
+      const healthyMindRegex =
+        /^https:\/\/([\w-]+\.)?healthymindspecialists\.com$/;
 
       if (
         !origin ||
         allowedOrigins.includes(origin) ||
-        almaymenteRegex.test(origin)
+        almaymenteRegex.test(origin) ||
+        healthyMindRegex.test(origin)
       ) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         callback(null, true);
