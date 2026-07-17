@@ -1,10 +1,22 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
+
+  // Railway terminates TLS one hop in front of us. Without this, req.ip is the
+  // proxy's address: the throttler buckets every user together and consentIp
+  // records the proxy instead of the patient.
+  app.set('trust proxy', 1);
+
+  // No ETags: this API serves PHI, and conditional revalidation buys little on
+  // small JSON payloads. With an ETag present Express answers a matching
+  // If-None-Match with a 304 regardless of the response's Cache-Control, so
+  // already-warm browser caches would keep revalidating against stale entries.
+  app.set('etag', false);
 
   // Enable CORS for all origins
   // Enable CORS for localhost (HTTP and HTTPS)
@@ -45,10 +57,8 @@ async function bootstrap() {
         almaymenteRegex.test(origin) ||
         healthyMindRegex.test(origin)
       ) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         callback(null, true);
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         callback(new Error('Not allowed by CORS'));
       }
     },

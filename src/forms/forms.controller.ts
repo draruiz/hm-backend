@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
   Param,
@@ -54,6 +55,7 @@ export class FormsController {
   @Get('contact/submissions')
   @UseGuards(RolesGuard)
   @Roles('admin')
+  @Header('Cache-Control', 'no-store')
   async listSubmissions(@Req() req: Request) {
     return this.formsService.findAllSubmissions({
       ip: req.ip ?? req.socket.remoteAddress ?? 'unknown',
@@ -69,6 +71,7 @@ export class FormsController {
   @Get('contact/submissions/:id')
   @UseGuards(RolesGuard)
   @Roles('admin')
+  @Header('Cache-Control', 'no-store')
   async getSubmission(
     @Param('id', ParseUUIDPipe) id: string,
     @Req() req: Request,
